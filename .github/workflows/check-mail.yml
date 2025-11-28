@@ -1,0 +1,17 @@
+name: Check Mail
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check new emails
+        run: |
+          curl -X POST "${{ secrets.VERCEL_URL }}/cron" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -d '{"action": "check_new_emails"}'
